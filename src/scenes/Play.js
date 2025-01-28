@@ -89,19 +89,21 @@ class Play extends Phaser.Scene {
     }
 
     update(time, delta) {
-        // check key input for restart
-        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keys.RESET)) {
-            this.scene.restart()
-        }
-        // check key input for returning to the menu
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keys.LEFT)) {
-            this.scene.start("menuScene")
-        }
         // scroll background
         this.space.tilePositionX -= 480 * (delta/1000)         // 4k pixels/second
         this.starfield.tilePositionX -= 240 * (delta/1000)     // 2k pixels/second
         this.starfield_2.tilePositionX -= 120 * (delta/1000)   // 1k pixels/second
-        if (this.gameOver) return
+        if (this.gameOver) {
+            // check key input for restart
+            if(Phaser.Input.Keyboard.JustDown(keys.RESET)) {
+                this.scene.restart()
+            }
+            // check key input for returning to the menu
+            if (Phaser.Input.Keyboard.JustDown(keys.LEFT)) {
+                this.scene.start("menuScene")
+            }
+            return
+        }
         // update player character
         this.p1Rocket.update(time, delta)
         // update spaceships
@@ -114,7 +116,7 @@ class Play extends Phaser.Scene {
             }
         }
         // decrease timer
-        this.gameTime -= delta
+        this.gameTime = Math.max(0, this.gameTime - delta)
         this.timeRight.text = Math.ceil(this.gameTime/1000) // Displays time in seconds
         if (this.gameTime <= 0) {
             this.endGame()

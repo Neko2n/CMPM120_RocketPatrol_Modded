@@ -43,7 +43,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
         // reset on miss
         if (this.y <= borderUISize * 3 + borderPadding) {
             this.reset()
-            this.scene.gameTime -= 4000
+            this.scene.gameTime = Math.max(0, this.scene.gameTime - 4000)
         }
     }
 
